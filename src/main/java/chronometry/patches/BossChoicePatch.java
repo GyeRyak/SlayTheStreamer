@@ -1,34 +1,22 @@
-package chronometry;
-
-import java.util.ArrayList;
+package chronometry.patches;
 
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInsertPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.evacipated.cardcrawl.modthespire.lib.ByRef;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.neow.NeowEvent;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.map.DungeonMap;
-import com.megacrit.cardcrawl.map.MapRoomNode;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.TreasureRoom;
 import com.megacrit.cardcrawl.ui.buttons.ProceedButton;
-import com.megacrit.cardcrawl.helpers.Hitbox;
-import com.megacrit.cardcrawl.helpers.controller.CInputAction;
-import com.megacrit.cardcrawl.helpers.controller.CInputActionSet;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import chronometry.SlayTheStreamer;
 import chronometry.BossSelectRoom;
-import basemod.ReflectionHacks;
 
 public class BossChoicePatch {
 	// Change Boss Image on Map when hidden

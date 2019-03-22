@@ -1,0 +1,13 @@
+{
+  "TwitchNotification": "ваши действия",
+  "AttackEffect": "наносит {num}{mul} урона",
+  "BuffStrengthEffect": "получает {num} силы",
+  "DebuffCardDiscardEffect": "добавляет {num} карт {effect} в стопку сброса",
+  "DebuffDexterityEffect": "снижает Ловкость на {num}",
+  "DebuffFrailEffect": "ослабляет броню на {num} ходов",
+  "DebuffStrengthEffect": "снижает Силу на {num}",
+  "DebuffVulnerableEffect": "накладывает уязвимость на {num} ходов",
+  "DebuffWeakEffect": "ослабляет атаки на {num} ходов",
+  "DefendEffect": "получает {num} блока",
+  "DefendOtherEffect": "дает {num} блока случайному союзнику"
+}

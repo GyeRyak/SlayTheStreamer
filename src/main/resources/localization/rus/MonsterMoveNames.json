@@ -1,0 +1,64 @@
+{
+  "AcidSlime_L": {
+    "NORMAL_TACKLE": "Плевок"
+  },
+  "AcidSlime_M": {
+    "NORMAL_TACKLE": "Плевок"
+  },
+  "AcidSlime_S": {
+    "TACKLE": "Плевок",
+    "DEBUFF": "Облизнуть"
+  },
+  "Cultist": {
+    "DARK_STRIKE": "Удар тьмы",
+    "UNIQUE_1": "получает +{num} Силы каждый ход"
+  },
+  "FungiBeast": {
+    "BITE": "Укус"
+  },
+  "GremlinNob": {
+    "BULL_RUSH": "Поддеть рогами",
+    "BELLOW": "Бешенство",
+    "UNIQUE_1": "получает +{num} к Силе за каждую сыгранную карту Навыка"
+  },
+  "Hexaghost": {
+    "TACKLE": "Удар огнем"
+  },
+  "JawWorm": {
+    "CHOMP": "Погрызть"
+  },
+  "Lagavulin": {
+    "STRONG_ATK": "Мощный удар"
+  },
+  "Looter": {
+    "SMOKE_BOMB": "Дымовая бомба",
+    "ESCAPE": "Побег",
+    "UNIQUE_1": "сбегает с боя"
+  },
+  "LouseDefensive": {
+    "BITE": "Укус"
+  },
+  "LouseNormal": {
+    "BITE": "Укус"
+  },
+  "Sentry": {
+    "BOLT": "Разряд",
+    "BEAM": "Луч"
+  },
+  "SlaverBlue": {
+    "STAB": "Удар"
+  },
+  "SlaverRed": {
+    "STAB": "Удар",
+    "UNIQUE_1": "запрещает использовать карты Атаки на {num} ходов"
+  },
+  "SlimeBoss": {
+    "UNIQUE_1": "готовит мощный удар"
+  },
+  "SpikeSlime_L": {
+    "FLAME_TACKLE": "Плевок огнем"
+  },
+  "SpikeSlime_M": {
+    "FLAME_TACKLE": "Плевок огнем"
+  }
+}

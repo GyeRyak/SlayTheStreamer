@@ -1,21 +1,18 @@
 package chronometry;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Properties;
 import java.util.Iterator;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 
+import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.characters.AbstractPlayer.PlayerClass;
-import com.megacrit.cardcrawl.core.EnergyManager;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 
 import basemod.BaseMod;
@@ -26,26 +23,28 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 
 import chronometry.patches.*;
-import chronometry.ConfigPanel;
-import chronometry.BossSelectScreen;
 import chronometry.patches.NoSkipBossRelicPatch;
-import chronometry.MonsterMessageRepeater;
 
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import de.robojumper.ststwitch.*;
+
+import com.google.gson.Gson;
 
     // TODO:
     //   Active monsters could have a listener that lets the user talk on screen
     //crashes if you try to restart the run
 
 @SpireInitializer
-public class SlayTheStreamer implements PostInitializeSubscriber, StartGameSubscriber, PostDungeonInitializeSubscriber {
+public class SlayTheStreamer implements PostInitializeSubscriber, StartGameSubscriber,
+        PostDungeonInitializeSubscriber, PostEnergyRechargeSubscriber, OnStartBattleSubscriber, EditStringsSubscriber {
 
     public static final Logger logger = LogManager.getLogger(SlayTheStreamer.class.getName());
 
     private static final String MOD_NAME = "Slay the Streamer";
-    private static final String AUTHOR = "Chronometrics";
+    private static final String AUTHOR = "Tayi_Saito";
     private static final String DESCRIPTION = "Chat vs Streamer in the ultimate showdown! The streamer begins with a winnable deck, and chat tries to find ways to ruin it by voting and influencing the run throughout the stream. Requires Twitch Integration to work.";
 
     public static SpireConfig config;
@@ -58,6 +57,8 @@ public class SlayTheStreamer implements PostInitializeSubscriber, StartGameSubsc
     public static Map<String, Integer> usedNames = new HashMap(); // displayname, # voted
     public static Map<String, String> displayNames = new HashMap(); // username, displayname
     public static Map<String, Integer> votedTimes = new HashMap();  // displayname, voted times
+    public static HashMap<String, HashMap<String, String>> localizedMonsterMoves;
+    public static HashMap<String, String> localizedChatEffects;
 
     @SuppressWarnings("deprecation")
     public SlayTheStreamer() {
@@ -166,5 +167,70 @@ public class SlayTheStreamer implements PostInitializeSubscriber, StartGameSubsc
         if (config.getBool("VoteOnBosses")) {
             this.bossHidden = true;
         }
+    }
+
+    public void receiveOnBattleStart(AbstractRoom room) {
+        this.receivePostEnergyRecharge();
+    }
+
+    public void receivePostEnergyRecharge() {
+        if (AbstractDungeon.getCurrRoom().monsters != null) {
+            Iterator var1 = AbstractDungeon.getCurrRoom().monsters.monsters.iterator();
+            AbstractMonster m;
+            SlayTheStreamer.logger.info("monster group size "
+                    .concat(String.valueOf(AbstractDungeon.getCurrRoom().monsters.monsters.size())));
+            while (var1.hasNext()) {
+                m = (AbstractMonster)var1.next();
+                SlayTheStreamer.logger.info("monster ".concat(m.name).concat(" isDying ")
+                        .concat(String.valueOf(m.isDying)).concat(" isPlayer ")
+                        .concat(String.valueOf(AbstractMonsterPatch.is_player.get(m))));
+                if (m.isDying || !AbstractMonsterPatch.is_player.get(m)) { continue; }
+                SlayTheStreamer.logger.info("monster ".concat(m.name));
+                try {
+                    Method turn_start_func = AbstractMonsterPatch.turn_start_func.get(m);
+                    if (turn_start_func != null) {
+                        SlayTheStreamer.logger.info("found turn start func");
+                        turn_start_func.invoke(null, m);
+                    }
+                }
+                catch (IllegalAccessException | InvocationTargetException exc) {
+                    SlayTheStreamer.logger.info("catched error in turn start func");
+                }
+                ArrayList<IntentData> moves = IntentData.getAvailableMoves(m);
+                SlayTheStreamer.logger.info("moves available ".concat(String.valueOf(moves.size())));
+                if (moves.size() > 0) {
+                    m.setMove((byte)-1, AbstractMonster.Intent.UNKNOWN);
+                    AbstractMonsterPatch.had_turn.set(m, false);
+                    IntentData.refreshCooldown(m);
+                    MonsterMessageRepeater.remindActions(m);
+                }
+            }
+        }
+    }
+
+    public void receiveEditStrings() {
+        String path = "localization/";
+        if (Settings.language.toString().equals("RUS")) {
+            path = path.concat(Settings.language.toString().toLowerCase());
+        }
+        else {
+            path = path.concat("eng");
+        }
+
+        Type tokenType = new TypeToken<HashMap<String, HashMap<String, String>>>() {}.getType();
+        SlayTheStreamer.localizedMonsterMoves = new HashMap<>(
+                new Gson().fromJson(
+                        Gdx.files.internal(path.concat("/MonsterMoveNames.json")).readString(String.valueOf(StandardCharsets.UTF_8)),
+                        tokenType
+                )
+        );
+
+        tokenType = new TypeToken<HashMap<String, String>>() {}.getType();
+        SlayTheStreamer.localizedChatEffects = new HashMap<>(
+                new Gson().fromJson(
+                        Gdx.files.internal(path.concat("/ChatEffectStrings.json")).readString(String.valueOf(StandardCharsets.UTF_8)),
+                        tokenType
+                )
+        );
     }
 }

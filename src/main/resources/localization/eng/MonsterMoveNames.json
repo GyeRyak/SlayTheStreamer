@@ -1,0 +1,64 @@
+{
+  "AcidSlime_L": {
+    "NORMAL_TACKLE": "Tackle"
+  },
+  "AcidSlime_M": {
+    "NORMAL_TACKLE": "Tackle"
+  },
+  "AcidSlime_S": {
+    "TACKLE": "Tackle",
+    "DEBUFF": "Lick"
+  },
+  "Cultist": {
+    "DARK_STRIKE": "Dark Strike",
+    "UNIQUE_1": "gains +{num} Strength every turn"
+  },
+  "FungiBeast": {
+    "BITE": "Bite"
+  },
+  "GremlinNob": {
+    "BULL_RUSH": "Bull Rush",
+    "BELLOW": "Enrage",
+    "UNIQUE_1": "gains {num} Strength whenever Skill card is played"
+  },
+  "Hexaghost": {
+    "TACKLE": "Fire Strike"
+  },
+  "JawWorm": {
+    "CHOMP": "Chomp"
+  },
+  "Lagavulin": {
+    "STRONG_ATK": "Smash"
+  },
+  "Looter": {
+    "SMOKE_BOMB": "Smoke Bomb",
+    "ESCAPE": "Escape",
+    "UNIQUE_1": "escapes the battle"
+  },
+  "LouseDefensive": {
+    "BITE": "Bite"
+  },
+  "LouseNormal": {
+    "BITE": "Bite"
+  },
+  "Sentry": {
+    "BOLT": "Bolt",
+    "BEAM": "Beam"
+  },
+  "SlaverBlue": {
+    "STAB": "Stab"
+  },
+  "SlaverRed": {
+    "STAB": "Stab",
+    "UNIQUE_1": "forbids use of Attack cards for {num} turns"
+  },
+  "SlimeBoss": {
+    "UNIQUE_1": "prepares for a powerful slam"
+  },
+  "SpikeSlime_L": {
+    "FLAME_TACKLE": "Flame Tackle"
+  },
+  "SpikeSlime_M": {
+    "FLAME_TACKLE": "Flame Tackle"
+  }
+}

@@ -1,50 +1,25 @@
 package chronometry.patches;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.lang.reflect.*;
 
-import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInsertPatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
-import com.evacipated.cardcrawl.modthespire.lib.ByRef;
 
 import com.gikk.twirk.*;
-import com.gikk.twirk.events.*;
 import com.gikk.twirk.types.users.*;
-import com.gikk.twirk.types.twitchMessage.*;
 
-import com.megacrit.cardcrawl.localization.*;
-import com.megacrit.cardcrawl.relics.*;
-import com.megacrit.cardcrawl.blights.*;
-import com.megacrit.cardcrawl.screens.mainMenu.*;
-import com.badlogic.gdx.*;
 import com.megacrit.cardcrawl.dungeons.*;
-import com.badlogic.gdx.math.*;
-import com.megacrit.cardcrawl.characters.*;
-import com.megacrit.cardcrawl.helpers.controller.*;
 import com.megacrit.cardcrawl.core.*;
-import com.megacrit.cardcrawl.rooms.*;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.megacrit.cardcrawl.vfx.*;
 import com.badlogic.gdx.graphics.*;
 import com.megacrit.cardcrawl.helpers.*;
-import com.megacrit.cardcrawl.unlock.*;
-import com.megacrit.cardcrawl.screens.*;
 import com.megacrit.cardcrawl.monsters.*;
 import java.util.*;
-import java.util.stream.*;
-import java.util.function.*;
-import org.apache.logging.log4j.*;
 import de.robojumper.ststwitch.*;
-import de.robojumper.ststwitch.TwitchConnection;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import chronometry.SlayTheStreamer;
 import basemod.ReflectionHacks;
-import chronometry.BossChoicePatch;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
@@ -72,13 +47,15 @@ public class MonsterNamesPatch {
         	// Get the right name
             final TwitchVoter twitchVoter = TwitchPanel.getDefaultVoter().get();
 			Set<String> votedUsernames = (Set<String>)ReflectionHacks.getPrivate(twitchVoter, TwitchVoter.class, "votedUsernames");
-
+			//votedUsernames.add("Tayi_Saito");
 			if (votedUsernames.size() > 0) {
 
 				/* ¡éBetter Randomness¡é */
 				List<String> screwYouList = new ArrayList(votedUsernames);
-				Map<String, Double> weightedMap = new HashMap(); // <username, weight> pool contains who voted right before
-				double totalWeight = 0.0d;
+				//Map<String, Double> weightedMap = new HashMap(); // <username, weight> pool contains who voted right before
+				// double totalWeight = 0.0d;
+				double maxWeight = 0.0d;
+				String username = "";
 
 				for(String e: screwYouList){
 					String tarName = e;
@@ -97,28 +74,33 @@ public class MonsterNamesPatch {
 
 					if(SlayTheStreamer.votedTimes.containsKey(tarName)){
 						SlayTheStreamer.votedTimes.put(tarName, SlayTheStreamer.votedTimes.get(tarName) + 1);
-						weightedMap.put(e, Math.pow((double)(SlayTheStreamer.votedTimes.get(tarName)+15),1.05d)/Math.pow((double)(chosenTimes + 5),2.5d));
-						totalWeight = totalWeight + weightedMap.get(e);
+						//weightedMap.put(e, weight);
+						// totalWeight = totalWeight + weightedMap.get(e);
 					}
 					else{ // not voted before
 						SlayTheStreamer.votedTimes.put(tarName, 1);
-						weightedMap.put(e, Math.pow((double)(SlayTheStreamer.votedTimes.get(tarName)+15),1.05d)/Math.pow((double)(chosenTimes + 5),2.5d));
-						totalWeight = totalWeight + weightedMap.get(e);
+						//weightedMap.put(e, weight);
+						// totalWeight = totalWeight + weightedMap.get(e);
+					}
+					double weight = Math.pow((double)(SlayTheStreamer.votedTimes.get(tarName)+15),1.05d)/Math.pow((double)(chosenTimes + 5),2.5d);
+					if (weight > maxWeight) {
+						maxWeight = weight;
+						username = e;
 					}
 					SlayTheStreamer.log("Name " + tarName + ", Voted " + SlayTheStreamer.votedTimes.get(tarName) + " time(s), " +
-							"Chosed " + chosenTimes + " time(s), " + "weight is " + weightedMap.get(e));
+							"Chosed " + chosenTimes + " time(s), " + "weight is " + weight);
 				}
 
-				String username = null;
-				double randomVal = random.nextDouble() * totalWeight;
+				// String username = null;
+				// double randomVal = random.nextDouble() * totalWeight;
 
-				for(String e: weightedMap.keySet()){
-					randomVal -= weightedMap.get(e);
-					if(randomVal <= 0.0d){
-						username = e;
-						break;
-					}
-				}
+				// for(String e: weightedMap.keySet()){
+					//randomVal -= weightedMap.get(e);
+					//if(randomVal <= 0.0d){
+					//	username = e;
+					//	break;
+					//}
+				//}
 
 				String usernameOrigin = username;
 
@@ -144,6 +126,7 @@ public class MonsterNamesPatch {
 
 				//.substring(0, 1).toUpperCase() + username.substring(1);
 				self.name = username;
+				AbstractMonsterPatch.is_player.set(self, true);
 				votedUsernames.remove(usernameOrigin);
 			}
         }
@@ -154,7 +137,9 @@ public class MonsterNamesPatch {
     public static class storeTwitchNames {
     	@SpireInsertPatch( rloc = 33, localvars={"user"} )
         public static void Insert(Twirk self, String line, TwitchUser user) {
-        	SlayTheStreamer.displayNames.put(user.getUserName(), user.getDisplayName());
+			if (user.getDisplayName().matches("\\w+")) {
+				SlayTheStreamer.displayNames.put(user.getUserName(), user.getDisplayName());
+			}
         }
     }
 

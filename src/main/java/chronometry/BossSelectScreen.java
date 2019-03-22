@@ -1,40 +1,41 @@
 package chronometry;
 
-import com.megacrit.cardcrawl.localization.*;
-import com.megacrit.cardcrawl.monsters.exordium.*;
-import com.megacrit.cardcrawl.monsters.city.*;
-import com.megacrit.cardcrawl.monsters.beyond.*;
+import basemod.ReflectionHacks;
+import chronometry.patches.BossChoicePatch;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.esotericsoftware.spine.Skeleton;
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.screens.mainMenu.*;
-import com.megacrit.cardcrawl.dungeons.*;
-import com.megacrit.cardcrawl.characters.*;
-import com.megacrit.cardcrawl.helpers.controller.*;
-import com.megacrit.cardcrawl.core.*;
-import com.megacrit.cardcrawl.rooms.*;
-import com.megacrit.cardcrawl.vfx.*;
-import com.megacrit.cardcrawl.helpers.*;
-import com.megacrit.cardcrawl.unlock.*;
+import com.megacrit.cardcrawl.monsters.beyond.AwakenedOne;
+import com.megacrit.cardcrawl.monsters.beyond.Donu;
+import com.megacrit.cardcrawl.monsters.beyond.TimeEater;
+import com.megacrit.cardcrawl.monsters.city.BronzeAutomaton;
+import com.megacrit.cardcrawl.monsters.city.Champ;
+import com.megacrit.cardcrawl.monsters.city.TheCollector;
+import com.megacrit.cardcrawl.monsters.exordium.SlimeBoss;
+import com.megacrit.cardcrawl.monsters.exordium.TheGuardian;
+import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
+import com.megacrit.cardcrawl.vfx.BossChestShineEffect;
 import com.megacrit.cardcrawl.vfx.GlowyFireEyesEffect;
 import com.megacrit.cardcrawl.vfx.StaffFireEffect;
-import com.megacrit.cardcrawl.vfx.combat.InflameEffect;
+import de.robojumper.ststwitch.TwitchPanel;
+import de.robojumper.ststwitch.TwitchVoteListener;
+import de.robojumper.ststwitch.TwitchVoteOption;
+import de.robojumper.ststwitch.TwitchVoter;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.*;
-import com.esotericsoftware.spine.Skeleton;
-
-import java.util.*;
-import java.util.stream.*;
-import java.util.function.*;
-import java.lang.reflect.*;
-import org.apache.logging.log4j.*;
-import de.robojumper.ststwitch.*;
-
-import chronometry.SlayTheStreamer;
-import chronometry.BossChoicePatch;
-import chronometry.HexaghostModel;
-import basemod.ReflectionHacks;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
 
 public class BossSelectScreen {
 
@@ -49,7 +50,7 @@ public class BossSelectScreen {
 
     boolean isVoting;
     boolean mayVote;
-    
+
     protected ArrayList<AbstractMonster> bosses = new ArrayList();
     boolean reopened = false;
 
@@ -59,12 +60,12 @@ public class BossSelectScreen {
         this.isVoting = false;
         this.mayVote = false;
 
-        this.monsterX.add(964.0f);
-        this.monsterY.add(540.0f);
-        this.monsterX.add(804.0f);
-        this.monsterY.add(360.0f);
-        this.monsterX.add(1124.0f);
-        this.monsterY.add(360.0f);
+        this.monsterX.add(964.0f * Settings.scale);
+        this.monsterY.add(540.0f * Settings.scale);
+        this.monsterX.add(804.0f * Settings.scale);
+        this.monsterY.add(360.0f * Settings.scale);
+        this.monsterX.add(1124.0f * Settings.scale);
+        this.monsterY.add(360.0f * Settings.scale);
 
         this.smokeImg = ImageMaster.loadImage("versusImages/BossScreenOverlay.png");
 
@@ -222,10 +223,16 @@ public class BossSelectScreen {
             this.renderTwitchVotes(sb);
         }
 
+        // comment below was written by original author, Chronometrics I think
+
         // For whomever next looks at this code, I just want you to know
         //
         //      You are beautiful to me
         //
+
+        // and this is my (Tayi_Saito) answer
+
+        //      AYAYA Clap <3
     }
     
     public void renderTwitchVotes(final SpriteBatch sb) {
@@ -233,6 +240,7 @@ public class BossSelectScreen {
             SlayTheStreamer.log("Twitch not active");
             return;
         }
+        sb.draw(SlayTheStreamer.startScreenImage, Settings.WIDTH / 2.0F, -25.0F);
         if (this.getVoter().isPresent()) {
             final TwitchVoter twitchVoter = this.getVoter().get();
             final TwitchVoteOption[] options = twitchVoter.getOptions();
@@ -259,7 +267,6 @@ public class BossSelectScreen {
             }
             FontHelper.renderFontCentered(sb, FontHelper.panelNameFont, "VOTE NOW: " + twitchVoter.getSecondsRemaining() + "s left.", Settings.WIDTH / 2.0f, 192.0f * Settings.scale, Color.WHITE.cpy());
         }
-        sb.draw(SlayTheStreamer.startScreenImage, Settings.WIDTH / 2.0F, 0);
     }
 
     // Twitch Voting Stuff goes here            

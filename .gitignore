@@ -3,6 +3,7 @@
 .__MACOSX
 target/
 PSDs/
+sts_libs/
 
 # Compiled class file
 *.class

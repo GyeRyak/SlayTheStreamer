@@ -1,0 +1,13 @@
+{
+  "TwitchNotification": "your actions",
+  "AttackEffect": "deals {num}{mul} damage",
+  "BuffStrengthEffect": "gains {num} strength",
+  "DebuffCardDiscardEffect": "add {num} {effect} cards to the discard pile",
+  "DebuffDexterityEffect": "decreases Dexterity by {num}",
+  "DebuffFrailEffect": "apply Frail for {num} turns",
+  "DebuffStrengthEffect": "decreases Strength by {num}",
+  "DebuffVulnerableEffect": "apply Vulnerable for {num} turns",
+  "DebuffWeakEffect": "apply Weak for {num} turns",
+  "DefendEffect": "gains {num} block",
+  "DefendOtherEffect": "gives {num} block to a random ally"
+}

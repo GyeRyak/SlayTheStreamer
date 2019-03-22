@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
-import com.evacipated.cardcrawl.modthespire.lib.ByRef;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.neow.NeowEvent;
 import com.megacrit.cardcrawl.neow.NeowReward;
@@ -17,9 +16,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
-import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.map.DungeonMap;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import de.robojumper.ststwitch.*;
 
@@ -213,8 +210,8 @@ public class StartGamePatch {
                 }
 
                 float y = (Settings.OPTION_Y - 500.0F * Settings.scale);
-      			y += i * -82.0F;
-      			y -= 4 * -82.0F;
+      			y += i * -82.0F * Settings.scale;
+      			y -= 4 * -82.0F * Settings.scale;
       			// y += 18.5F;
 
                 FontHelper.renderFontRightAligned(sb, FontHelper.panelEndTurnFont, s, 160.0F * Settings.scale, y, Color.WHITE.cpy());
