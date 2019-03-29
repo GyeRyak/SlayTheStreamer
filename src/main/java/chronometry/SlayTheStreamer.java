@@ -60,6 +60,11 @@ public class SlayTheStreamer implements PostInitializeSubscriber, StartGameSubsc
     public static HashMap<String, HashMap<String, String>> localizedMonsterMoves;
     public static HashMap<String, String> localizedChatEffects;
 
+    public static String movePatternBase = "";
+    public static String movePatternChecker = "";
+    public static String movePatternExtractor = "";
+
+
     @SuppressWarnings("deprecation")
     public SlayTheStreamer() {
         BaseMod.subscribe(this);
@@ -211,7 +216,7 @@ public class SlayTheStreamer implements PostInitializeSubscriber, StartGameSubsc
     public void receiveEditStrings() {
         String path = "localization/";
 
-        switch(Settings.language.toString()){
+        switch(Settings.language.toString()){ // set path by language
             case "RUS":
             case "KOR":
                 path = path.concat(Settings.language.toString().toLowerCase());
@@ -222,6 +227,20 @@ public class SlayTheStreamer implements PostInitializeSubscriber, StartGameSubsc
                 break;
         }
 
+        movePatternBase = "(#";
+        switch(Settings.language.toString()){ // set patternMatcher by language
+            case "RUS":
+                break;
+            case "KOR":
+                movePatternBase.concat("|x|ㅌ|투표");
+                break;
+            case "ENG":
+            default:
+                break;
+        }
+        movePatternBase.concat(")");
+        movePatternChecker = "^" + movePatternBase + ".*$"; // pattern checker
+        movePatternExtractor = "^" + movePatternBase; // pattern remover
 
         Type tokenType = new TypeToken<HashMap<String, HashMap<String, String>>>() {}.getType();
         SlayTheStreamer.localizedMonsterMoves = new HashMap<>(

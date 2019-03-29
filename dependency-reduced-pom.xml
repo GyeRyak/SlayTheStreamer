@@ -4,7 +4,7 @@
   <groupId>chronometry</groupId>
   <artifactId>SlayTheStreamer</artifactId>
   <name>Slay the Streamer</name>
-  <version>2.0.0</version>
+  <version>2.0.3</version>
   <description>Chat vs Streamer in the ultimate showdown! The streamer begins with a winnable deck, and chat tries to find ways to ruin it by voting and influencing the run throughout the stream. Requires Twitch Integration to work.</description>
   <build>
     <finalName>Slay the Streamer</finalName>
@@ -62,8 +62,8 @@
     </dependency>
   </dependencies>
   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
   </properties>
 </project>
 
